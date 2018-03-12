@@ -1,0 +1,32 @@
+stages:
+  - build
+  - prod
+  
+build:
+  image: node:6.11.4
+  stage: build
+  script:
+    - npm install --quiet
+  tags:
+    - sofia-bot
+  artifacts:
+    untracked: true
+    expire_in: 5 mins 0 sec
+  only:
+    - master
+
+PROD:
+  image: node:6.11.4
+  stage: prod
+  dependencies:
+    - build
+  script:
+    - npm run azure-publish 
+  tags:
+    - ubuntu-minvu-prod-nodejs
+  artifacts:
+    untracked: true
+    expire_in: 5 mins 0 sec
+  only:
+    - master
+  
